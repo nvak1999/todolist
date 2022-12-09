@@ -1,6 +1,9 @@
 import React from "react";
+import Header from "./components/Header";
 import "./App.css";
 import { useState } from "react";
+import TaskList from "./components/TaskList";
+import AddTaskForm from "./components/AddTaskForm";
 
 function App() {
   const [tasks, setTasks] = useState([
@@ -33,60 +36,21 @@ function App() {
     setTasks(tasks.filter((task) => task.id !== taskID));
   };
   return (
-    <div>
-      <div className="container">
-        <h1 className="title">
-          Todo list
-          <span>Get one item done at a time</span>
-        </h1>
+    <div className="container">
+      <Header title="Todo list" subTitle="Get one item done at a time" />
+      <TaskList
+        tasks={tasks}
+        showIncomplete={showIncomplete}
+        setTaskStatus={setTaskStatus}
+        removeTask={removeTask}
+        setShowIncomplete={setShowIncomplete}
+      />
 
-        <ul className="task-list">
-          {tasks
-            .filter(
-              (task) => (showIncomplete ? task.status !== 1 : true) ///////
-            ) //////
-            .map((task) => (
-              <li key={task.id} className={task.status ? "done" : ""}>
-                <span className="label">{task.title} </span>
-                <div className="actions">
-                  <input
-                    type="checkbox"
-                    className="btn-action btn-action-done"
-                    checked={Boolean(task.status)}
-                    onChange={(e) => setTaskStatus(task.id, e.target.checked)} /////
-                  />
-                  <button
-                    className="btn-action btn-action-delete"
-                    onClick={() => removeTask(task.id)}
-                  >
-                    ⨯
-                  </button>
-                </div>
-              </li>
-            ))}
-        </ul>
-        <div className="filter-wrapper">
-          <label htmlFor="filter" className="filter-label">
-            Show imcompleted tasks only
-          </label>
-          <input
-            type="checkbox"
-            id="filter"
-            checked={showIncomplete}
-            onChange={(e) => setShowIncomplete(Boolean(e.target.checked))}
-          />
-        </div>
-        <form action="#" className="form" onSubmit={handleSubmit}>
-          <label htmlFor="newitem">Add to the todo list</label>
-          <input
-            type="text"
-            id="newitem"
-            value={newTask}
-            onChange={handleInputChage}
-          />
-          <button type="submit">Add Item</button>
-        </form>
-      </div>
+      <AddTaskForm
+        handleSubmit={handleSubmit}
+        newTask={newTask}
+        handleInputChage={handleInputChage}
+      />
     </div>
   );
 }
